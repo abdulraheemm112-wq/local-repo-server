@@ -1,16 +1,26 @@
 import { useMemo } from 'react';
 import { Heart } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { MOCK_FILES } from '@/lib/data';
+import { useQuery } from '@tanstack/react-query';
 import { useWishlist } from '@/hooks/use-wishlist';
 import FileCard from '@/components/FileCard';
+
+const fetchFiles = async () => {
+  const res = await fetch('/api/files');
+  return res.json();
+};
 
 const Wishlist = () => {
   const { wishlist, isWishlisted, toggle } = useWishlist();
 
+  const { data: allFiles = [] } = useQuery({
+    queryKey: ['files'],
+    queryFn: fetchFiles,
+  });
+
   const wishlisted = useMemo(
-    () => MOCK_FILES.filter((f) => wishlist.includes(f.name)),
-    [wishlist]
+    () => allFiles.filter((f: any) => wishlist.includes(f.name)),
+    [allFiles, wishlist]
   );
 
   return (
@@ -38,7 +48,7 @@ const Wishlist = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {wishlisted.map((file, i) => (
+            {wishlisted.map((file: any, i: number) => (
               <FileCard
                 key={file.name}
                 file={file}
@@ -55,4 +65,3 @@ const Wishlist = () => {
 };
 
 export default Wishlist;
-

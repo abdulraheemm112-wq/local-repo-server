@@ -1,7 +1,6 @@
+import React from 'react';
 import { Terminal, Database, Cpu, Wrench, Film, FileText, Download, Heart } from 'lucide-react';
 import { motion } from 'framer-motion';
-
-const API = import.meta.env.VITE_API;
 
 type FileItem = {
   name: string;
@@ -45,7 +44,7 @@ const FileCard = ({
 
   const handleDownload = () => {
     window.open(
-      `${API}/download/${encodeURIComponent(file.category)}/${encodeURIComponent(file.name)}`,
+      `/download/${encodeURIComponent(file.category)}/${encodeURIComponent(file.name)}`,
       '_blank'
     );
   };
@@ -78,11 +77,10 @@ const FileCard = ({
             className="flex-shrink-0 p-1.5 rounded-lg transition-all duration-200 hover:bg-destructive/10"
           >
             <Heart
-              className={`w-4 h-4 transition-colors duration-200 ${
-                isWishlisted
-                  ? 'fill-destructive text-destructive'
-                  : 'text-muted-foreground'
-              }`}
+              className={`w-4 h-4 transition-colors duration-200 ${isWishlisted
+                ? 'fill-destructive text-destructive'
+                : 'text-muted-foreground'
+                }`}
             />
           </button>
         )}

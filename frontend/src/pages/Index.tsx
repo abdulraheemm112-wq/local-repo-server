@@ -6,17 +6,17 @@ import SearchBar from '@/components/SearchBar';
 import CategoryFilter from '@/components/CategoryFilter';
 import FileCard from '@/components/FileCard';
 import TopDownloads from '@/components/TopDownloads';
-
-const API = import.meta.env.VITE_API;
+import { useWishlist } from '@/hooks/use-wishlist';
 
 const fetchFiles = async () => {
-  const res = await fetch(`${API}/api/files`);
+  const res = await fetch('/api/files');
   return res.json();
 };
 
 const Home = () => {
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('All');
+  const { isWishlisted, toggle } = useWishlist();
 
   const { data: files = [] } = useQuery({
     queryKey: ['files'],
@@ -94,6 +94,8 @@ const Home = () => {
                     key={file.name}
                     file={file}
                     index={i}
+                    isWishlisted={isWishlisted(file.name)}
+                    onToggleWishlist={() => toggle(file.name)}
                   />
                 ))}
               </div>
