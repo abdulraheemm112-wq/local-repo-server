@@ -79,10 +79,21 @@ app.post('/api/wishlist', (req, res) => {
   const wishlist = readJSON(wishlistFile, []);
   const { item } = req.body;
 
-  if (item) {
+  if (item && !wishlist.includes(item)) {
     wishlist.push(item);
     writeJSON(wishlistFile, wishlist);
   }
+
+  res.json({ success: true });
+});
+
+// Wishlist - Remove
+app.delete('/api/wishlist/:item', (req, res) => {
+  let wishlist = readJSON(wishlistFile, []);
+  const item = decodeURIComponent(req.params.item);
+
+  wishlist = wishlist.filter((i) => i !== item);
+  writeJSON(wishlistFile, wishlist);
 
   res.json({ success: true });
 });
